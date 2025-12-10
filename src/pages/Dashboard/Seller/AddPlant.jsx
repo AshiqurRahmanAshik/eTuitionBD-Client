@@ -1,12 +1,12 @@
-import AddPlantForm from '../../../components/Form/AddPlantForm'
+import PostTuitionForm from "../../../components/Form/PostTuitionForm";
 
 const AddPlant = () => {
   return (
     <div>
       {/* Form */}
-      <AddPlantForm />
+      <PostTuitionForm />
     </div>
-  )
-}
+  );
+};
 
-export default AddPlant
+export default AddPlant;
