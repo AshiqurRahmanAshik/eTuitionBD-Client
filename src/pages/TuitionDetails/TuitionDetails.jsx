@@ -140,7 +140,7 @@ const TuitionDetails = () => {
               Budget: ৳{tuition.budget}
             </p>
             <div>
-              <Button onClick={() => setIsOpen(true)} label="Apply Now" />
+              <Button onClick={() => setIsOpen(true)} label="Book Now" />
             </div>
           </div>
           <hr className="my-6" />

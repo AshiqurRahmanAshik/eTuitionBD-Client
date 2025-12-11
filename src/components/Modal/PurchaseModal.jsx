@@ -1,54 +1,105 @@
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
-const PurchaseModal = ({ closeModal, isOpen }) => {
-  // Total Price Calculation
+const PurchaseModal = ({ closeModal, isOpen, tuition }) => {
+  const { user } = useAuth();
+  const { _id, subject, className, medium, location, schedule, phone, budget } =
+    tuition || {};
+
+  const handlePayment = async () => {
+    try {
+      const paymentInfo = {
+        tuitionId: _id,
+        subject,
+        className,
+        medium,
+        location,
+        schedule,
+        phone,
+        budget,
+        name: subject,
+        description: `Tuition for ${className} (${medium})`,
+        price: budget, 
+        quantity: 1,
+        customer: { email: user?.email },
+      };
+
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/create-checkout-session`,
+        paymentInfo
+      );
+      console.log(data);
+      // Stripe checkout redirect
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Payment failed:", error);
+    }
+  };
 
   return (
     <Dialog
       open={isOpen}
-      as='div'
-      className='relative z-10 focus:outline-none '
+      as="div"
+      className="relative z-10 focus:outline-none"
       onClose={closeModal}
     >
-      <div className='fixed inset-0 z-10 w-screen overflow-y-auto'>
-        <div className='flex min-h-full items-center justify-center p-4'>
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+        <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className='w-full max-w-md bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0 shadow-xl rounded-2xl'
+            className="w-full max-w-md bg-white p-6 shadow-xl rounded-2xl duration-300 ease-out 
+                       data-closed:transform-[scale(95%)] data-closed:opacity-0"
           >
+            {/* Title */}
             <DialogTitle
-              as='h3'
-              className='text-lg font-medium text-center leading-6 text-gray-900'
+              as="h3"
+              className="text-xl font-semibold text-center text-gray-900"
             >
-              Review Info Before Purchase
+              Review Tuition Information
             </DialogTitle>
-            <div className='mt-2'>
-              <p className='text-sm text-gray-500'>Plant: Money Plant</p>
-            </div>
-            <div className='mt-2'>
-              <p className='text-sm text-gray-500'>Category: Indoor</p>
-            </div>
-            <div className='mt-2'>
-              <p className='text-sm text-gray-500'>Customer: PH</p>
+
+            {/* Tuition Info */}
+            <div className="mt-4 space-y-3 text-gray-700 text-sm">
+              <p>
+                <span className="font-semibold">Subject:</span> {subject}
+              </p>
+              <p>
+                <span className="font-semibold">Class:</span> {className}
+              </p>
+              <p>
+                <span className="font-semibold">Medium:</span> {medium}
+              </p>
+              <p>
+                <span className="font-semibold">Location:</span> {location}
+              </p>
+              <p>
+                <span className="font-semibold">Schedule:</span> {schedule}
+              </p>
+              <p>
+                <span className="font-semibold">Contact:</span> {phone}
+              </p>
+              <p className="text-green-700 font-semibold">Budget: ৳{budget}</p>
             </div>
 
-            <div className='mt-2'>
-              <p className='text-sm text-gray-500'>Price: $ 120</p>
-            </div>
-            <div className='mt-2'>
-              <p className='text-sm text-gray-500'>Available Quantity: 5</p>
-            </div>
-            <div className='flex mt-2 justify-around'>
+            {/* Buttons */}
+            <div className="flex justify-around mt-6">
               <button
-                type='button'
-                className='cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2'
+                onClick={handlePayment}
+                type="button"
+                className="cursor-pointer inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 
+                           text-sm font-medium text-white hover:bg-blue-700"
               >
-                Pay
+                Pay Now
               </button>
+
               <button
-                type='button'
-                className='cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2'
+                type="button"
                 onClick={closeModal}
+                className="cursor-pointer inline-flex justify-center rounded-md bg-red-100 px-4 py-2 
+                           text-sm font-medium text-red-900 hover:bg-red-200"
               >
                 Cancel
               </button>
@@ -57,7 +108,7 @@ const PurchaseModal = ({ closeModal, isOpen }) => {
         </div>
       </div>
     </Dialog>
-  )
-}
+  );
+};
 
-export default PurchaseModal
+export default PurchaseModal;
