@@ -2,7 +2,7 @@ import Home from "../pages/Home/Home";
 import ErrorPage from "../pages/ErrorPage";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
-import PlantDetails from "../pages/PlantDetails/PlantDetails";
+import TuitionDetails from "../pages/TuitionDetails/TuitionDetails";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AddTuition from "../pages/Dashboard/Seller/AddTuition";
@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/tuition/:id",
-        element: <PlantDetails />,
+        element: <TuitionDetails />,
       },
     ],
   },

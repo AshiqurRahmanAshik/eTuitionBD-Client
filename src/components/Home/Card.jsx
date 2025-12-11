@@ -24,7 +24,7 @@ const Card = ({ tuition }) => {
               relative 
               overflow-hidden 
               rounded-xl
-              bg-gradient-to-br from-blue-100 to-purple-100
+              bg-linear-to-br from-blue-100 to-purple-100
               flex items-center justify-center
             "
         >
