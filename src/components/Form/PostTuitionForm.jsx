@@ -1,10 +1,47 @@
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import LoadingSpinner from "../Shared/LoadingSpinner";
 
 const PostTuitionForm = () => {
+  // useMutation hook useCase
+  const {
+    isPending,
+    isError,
+    mutateAsync,
+    reset: mutationReset,
+  } = useMutation({
+    mutationFn: async (payload) =>
+      await axios.post(`${import.meta.env.VITE_API_URL}/tuitions`, payload),
+    onSuccess: (data) => {
+      toast.success("Tuition posted successfully!");
+      mutationReset();
+      console.log("Tuition posted successfully:", data);
+    },
+    onError: (error) => {
+      console.error("Error posting tuition:", error);
+      toast.error("Failed to post tuition");
+    },
+    onMutate: (payload) => {
+      console.log("Posting tuition with data:", payload);
+    },
+    onSettled: (data, error) => {
+      if (data) {
+        console.log("Tuition post settled with data:", data);
+      }
+      if (error) {
+        console.error("Tuition post settled with error:", error);
+      }
+    },
+    retry: 3,
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -19,24 +56,34 @@ const PostTuitionForm = () => {
       phone,
     } = data;
 
-    const tuitionData = {
-      subject,
-      className,
-      medium,
-      location,
-      budget: Number(budget),
-      schedule,
-      description,
-      phone,
-    };
-
-    console.table(tuitionData);
+    try {
+      const tuitionData = {
+        subject,
+        className,
+        medium,
+        location,
+        budget: Number(budget),
+        schedule,
+        description,
+        phone,
+      };
+      await mutateAsync(tuitionData);
+      reset();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  if (isPending) return <LoadingSpinner />;
+  if (isError) return <div>Error occurred while posting tuition</div>;
+
   return (
-    <div className="space-y-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md"
+    >
       {/* Subject */}
-      <div>
+      <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Subject
         </label>
@@ -44,7 +91,7 @@ const PostTuitionForm = () => {
           {...register("subject", { required: "Subject is required" })}
           type="text"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          placeholder="Enter subject name"
+          placeholder="Enter subject"
         />
         {errors.subject && (
           <p className="mt-1 text-sm text-red-600">{errors.subject.message}</p>
@@ -52,7 +99,7 @@ const PostTuitionForm = () => {
       </div>
 
       {/* Class & Medium */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         {/* Class */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -91,8 +138,8 @@ const PostTuitionForm = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           >
             <option value="">Select medium</option>
-            <option value="Bangla">Bangla Medium</option>
-            <option value="English">English Medium</option>
+            <option value="Bangla Medium">Bangla Medium</option>
+            <option value="English Medium">English Medium</option>
             <option value="English Version">English Version</option>
           </select>
           {errors.medium && (
@@ -102,7 +149,7 @@ const PostTuitionForm = () => {
       </div>
 
       {/* Location */}
-      <div>
+      <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Location
         </label>
@@ -118,21 +165,17 @@ const PostTuitionForm = () => {
       </div>
 
       {/* Budget & Schedule */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         {/* Budget */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Budget
           </label>
           <input
-            {...register("budget", {
-              required: "Budget is required",
-              min: { value: 0, message: "Budget must be positive" },
-            })}
+            {...register("budget", { required: "Budget is required" })}
             type="number"
-            step="0.01"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="0.00"
+            placeholder="Enter budget"
           />
           {errors.budget && (
             <p className="mt-1 text-sm text-red-600">{errors.budget.message}</p>
@@ -145,12 +188,10 @@ const PostTuitionForm = () => {
             Schedule
           </label>
           <input
-            {...register("schedule", {
-              required: "Schedule is required",
-            })}
+            {...register("schedule", { required: "Schedule is required" })}
             type="text"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="e.g., 5-7 PM"
+            placeholder="Enter schedule"
           />
           {errors.schedule && (
             <p className="mt-1 text-sm text-red-600">
@@ -161,15 +202,15 @@ const PostTuitionForm = () => {
       </div>
 
       {/* Description */}
-      <div>
+      <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Description
         </label>
         <textarea
           {...register("description", { required: "Description is required" })}
-          rows={4}
+          rows="4"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          placeholder="Describe your requirement"
+          placeholder="Enter description"
         />
         {errors.description && (
           <p className="mt-1 text-sm text-red-600">
@@ -179,7 +220,7 @@ const PostTuitionForm = () => {
       </div>
 
       {/* Phone */}
-      <div>
+      <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Phone
         </label>
@@ -196,12 +237,13 @@ const PostTuitionForm = () => {
 
       {/* Submit Button */}
       <button
-        onClick={handleSubmit(onSubmit)}
-        className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium"
+        type="submit"
+        disabled={isPending}
+        className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Post Tuition
+        {isPending ? "Posting..." : "Post Tuition"}
       </button>
-    </div>
+    </form>
   );
 };
 

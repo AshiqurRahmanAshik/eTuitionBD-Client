@@ -1,6 +1,6 @@
 import PostTuitionForm from "../../../components/Form/PostTuitionForm";
 
-const AddPlant = () => {
+const AddTuition = () => {
   return (
     <div>
       {/* Form */}
@@ -9,4 +9,4 @@ const AddPlant = () => {
   );
 };
 
-export default AddPlant;
+export default AddTuition;
