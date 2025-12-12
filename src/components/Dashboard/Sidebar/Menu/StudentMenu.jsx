@@ -1,4 +1,11 @@
-import { BsFingerprint, BsPlusSquare, BsCardList, BsPersonCheck, BsWallet2, BsPerson } from "react-icons/bs";
+import {
+  BsFingerprint,
+  BsPlusSquare,
+  BsCardList,
+  BsPersonCheck,
+  BsWallet2,
+  BsPerson,
+} from "react-icons/bs";
 import { GrUserAdmin } from "react-icons/gr";
 import MenuItem from "./MenuItem";
 import { useState } from "react";
@@ -14,14 +21,16 @@ const StudentMenu = () => {
   return (
     <>
       {/* Existing dashboard */}
-      <MenuItem icon={BsFingerprint} label="My Dashboard" address="my-orders" />
+      <MenuItem icon={BsFingerprint} label="My Tuition" address="my-orders" />
 
       {/* Added missing menu items based on requirements */}
-      <MenuItem icon={BsPlusSquare} label="Post New Tuition" address="post-new-tuition" />
-      <MenuItem icon={BsCardList} label="My Tuitions" address="my-tuitions" />
-      <MenuItem icon={BsPersonCheck} label="Applied Tutors" address="applied-tutors" />
+      <MenuItem
+        icon={BsPlusSquare}
+        label="Post New Tuition"
+        address="post-new-tuition"
+      />
+
       <MenuItem icon={BsWallet2} label="Payments" address="payments" />
-      <MenuItem icon={BsPerson} label="Profile Settings" address="profile-settings" />
 
       {/* Become a tutor modal */}
       <div

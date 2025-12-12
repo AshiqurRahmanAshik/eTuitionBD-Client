@@ -22,11 +22,6 @@ const TutorMenu = () => {
         label="Revenue History"
         address="revenue-history"
       />
-      <MenuItem
-        icon={BsPerson}
-        label="Profile Settings"
-        address="profile-settings"
-      />
     </>
   );
 };
