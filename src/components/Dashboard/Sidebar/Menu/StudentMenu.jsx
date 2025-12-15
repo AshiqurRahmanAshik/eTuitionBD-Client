@@ -9,7 +9,7 @@ import {
 import { GrUserAdmin } from "react-icons/gr";
 import MenuItem from "./MenuItem";
 import { useState } from "react";
-import BecomeSellerModal from "../../../Modal/BecomeSellerModal";
+import BecomeTutorModal from "../../../Modal/BecomeTutorModal";
 
 const StudentMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +41,7 @@ const StudentMenu = () => {
         <span className="mx-4 font-medium">Become A Tutor</span>
       </div>
 
-      <BecomeSellerModal closeModal={closeModal} isOpen={isOpen} />
+      <BecomeTutorModal closeModal={closeModal} isOpen={isOpen} />
     </>
   );
 };

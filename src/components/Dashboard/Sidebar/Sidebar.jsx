@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
-import logo from "../../../assets/images/logo-flat.png";
+
 // Icons
 import { GrLogout } from "react-icons/gr";
 import { FcSettings } from "react-icons/fc";
@@ -32,7 +32,7 @@ const Sidebar = () => {
         <div>
           <div className="block cursor-pointer p-4 font-bold">
             <Link to="/">
-              <img src={logo} alt="logo" width="100" height="100" />
+              <img src="" alt="logo" width="100" height="100" />
             </Link>
           </div>
         </div>

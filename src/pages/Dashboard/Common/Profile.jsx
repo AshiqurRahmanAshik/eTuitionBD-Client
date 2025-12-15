@@ -1,61 +1,120 @@
+import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
-import coverImg from "../../../assets/images/cover.jpg";
 import useRole from "../../../hooks/useRole";
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUserName } = useAuth(); // function to update name in backend/Firebase
   const [role, isRoleLoading] = useRole();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [name, setName] = useState(user?.displayName || "");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateUserName(name); // only update name
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error("Name update failed:", err);
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white shadow-lg rounded-2xl md:w-4/5 lg:w-3/5">
-        <img
-          alt="cover photo"
-          src={coverImg}
-          className="w-full mb-4 rounded-t-lg h-56"
-        />
-        <div className="flex flex-col items-center justify-center p-4 -mt-16">
-          <a href="#" className="relative block">
-            <img
-              alt="profile"
-              src={user?.photoURL}
-              className="mx-auto object-cover rounded-full h-24 w-24  border-2 border-white "
-            />
-          </a>
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
+      <div className="bg-white shadow-xl rounded-2xl w-full max-w-3xl overflow-hidden">
+        {/* Cover Image */}
+        <img alt="cover" src="" className="w-full h-56 object-cover" />
 
-          <p className="p-2 px-4 text-xs text-white bg-lime-500 rounded-full">
-            {role}
-          </p>
-          <p className="mt-2 text-xl font-medium text-gray-800 ">
-            User Id: {user?.uid}
-          </p>
-          <div className="w-full p-2 mt-4 rounded-lg">
-            <div className="flex flex-wrap items-center justify-between text-sm text-gray-600 ">
-              <p className="flex flex-col">
-                Name
-                <span className="font-bold text-gray-600 ">
-                  {user?.displayName}
-                </span>
-              </p>
-              <p className="flex flex-col">
-                Email
-                <span className="font-bold text-gray-600 ">{user?.email}</span>
-              </p>
+        {/* Profile Info */}
+        <div className="flex flex-col items-center -mt-14 p-6">
+          <img
+            alt="profile"
+            src={user?.photoURL || defaultAvatar}
+            className="object-cover rounded-full h-28 w-28 border-4 border-white shadow-md"
+          />
 
-              <div>
-                <button className="bg-lime-500  px-10 py-1 rounded-lg text-white cursor-pointer hover:bg-lime-800 block mb-1">
-                  Update Profile
-                </button>
-                <button className="bg-lime-500 px-7 py-1 rounded-lg text-white cursor-pointer hover:bg-lime-800">
-                  Change Password
-                </button>
-              </div>
+          <div className="mt-3">
+            {isRoleLoading ? (
+              <span className="px-4 py-1 text-xs rounded-full bg-gray-300 text-gray-600">
+                Loading role...
+              </span>
+            ) : (
+              <span className="px-4 py-1 text-xs rounded-full bg-lime-500 text-white font-semibold uppercase">
+                {role}
+              </span>
+            )}
+          </div>
+
+          <p className="mt-3 text-sm text-gray-500">
+            User ID: <span className="font-medium">{user?.uid}</span>
+          </p>
+
+          {/* Info Box */}
+          <div className="w-full mt-6 bg-gray-50 rounded-xl p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <InfoItem label="Name" value={user?.displayName || "N/A"} />
+              <InfoItem label="Email" value={user?.email || "N/A"} />
+            </div>
+
+            {/* Update Name Button */}
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-lime-500 px-6 py-2 rounded-lg text-white font-semibold hover:bg-lime-600 transition"
+              >
+                Update Name
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Update Name Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
+              Update Name
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="text-gray-600 text-sm">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-lime-400"
+                />
+              </div>
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-lime-500 rounded-lg text-white hover:bg-lime-600 transition"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Profile;
+
+/* ---------- Reusable Info Item ---------- */
+const InfoItem = ({ label, value }) => (
+  <div className="flex flex-col">
+    <span className="text-gray-500 text-xs">{label}</span>
+    <span className="font-semibold text-gray-800">{value}</span>
+  </div>
+);

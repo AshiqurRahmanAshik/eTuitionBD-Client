@@ -50,7 +50,7 @@ const PostTuitionForm = () => {
       class: className,
       medium,
       location,
-      budget,
+      salary,
       schedule,
       description,
       phone,
@@ -62,7 +62,8 @@ const PostTuitionForm = () => {
         className,
         medium,
         location,
-        budget: Number(budget),
+        salary: Number(salary),
+
         schedule,
         description,
         phone,
@@ -164,21 +165,21 @@ const PostTuitionForm = () => {
         )}
       </div>
 
-      {/* Budget & Schedule */}
+      {/* salary & Schedule */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        {/* Budget */}
+        {/* salary */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Budget
+            salary
           </label>
           <input
-            {...register("budget", { required: "Budget is required" })}
+            {...register("salary", { required: "salary is required" })}
             type="number"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Enter budget"
+            placeholder="Enter salary"
           />
-          {errors.budget && (
-            <p className="mt-1 text-sm text-red-600">{errors.budget.message}</p>
+          {errors.salary && (
+            <p className="mt-1 text-sm text-red-600">{errors.salary.message}</p>
           )}
         </div>
 

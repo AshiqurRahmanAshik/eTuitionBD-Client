@@ -4,8 +4,15 @@ import axios from "axios";
 
 const PurchaseModal = ({ closeModal, isOpen, tuition }) => {
   const { user } = useAuth();
-  const { _id, subject, className, medium, location, schedule, phone, budget } =
-    tuition || {};
+
+  const {
+    _id,
+    subject,
+    class: className,
+    location,
+    perWeek,
+    salary,
+  } = tuition || {};
 
   const handlePayment = async () => {
     try {
@@ -13,24 +20,20 @@ const PurchaseModal = ({ closeModal, isOpen, tuition }) => {
         tuitionId: _id,
         subject,
         className,
-        medium,
         location,
-        schedule,
-        phone,
-        budget,
-        name: subject,
-        description: `Tuition for ${className} (${medium})`,
-        price: budget, 
+        perWeek,
+        price: salary,
         quantity: 1,
-        customer: { email: user?.email },
+        customer: {
+          email: user?.email,
+        },
       };
 
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/create-checkout-session`,
         paymentInfo
       );
-      console.log(data);
-      // Stripe checkout redirect
+
       if (data?.url) {
         window.location.href = data.url;
       }
@@ -43,72 +46,75 @@ const PurchaseModal = ({ closeModal, isOpen, tuition }) => {
     <Dialog
       open={isOpen}
       as="div"
-      className="relative z-10 focus:outline-none"
+      className="relative z-50 focus:outline-none"
       onClose={closeModal}
     >
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
-        <div className="flex min-h-full items-center justify-center p-4">
-          <DialogPanel
-            transition
-            className="w-full max-w-md bg-white p-6 shadow-xl rounded-2xl duration-300 ease-out 
-                       data-closed:transform-[scale(95%)] data-closed:opacity-0"
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-black/40" />
+
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel
+          className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl
+          transition-all duration-300"
+        >
+          {/* Title */}
+          <DialogTitle
+            as="h3"
+            className="text-2xl font-bold text-center text-blue-600 mb-6"
           >
-            {/* Title */}
-            <DialogTitle
-              as="h3"
-              className="text-xl font-semibold text-center text-gray-900"
+            Confirm Tuition Application
+          </DialogTitle>
+
+          {/* Tuition Info Card */}
+          <div className="space-y-4 text-gray-700 text-sm">
+            <InfoRow label="Subject" value={subject} />
+            <InfoRow label="Class" value={`Class ${className}`} />
+            <InfoRow label="Location" value={location} />
+            <InfoRow label="Classes / Week" value={perWeek} />
+
+            <hr />
+
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-gray-600">
+                Monthly Salary
+              </span>
+              <span className="text-xl font-bold text-green-600">
+                ৳ {Number(salary).toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="mt-8 flex gap-4">
+            <button
+              onClick={handlePayment}
+              className="flex-1 rounded-xl bg-blue-600 px-4 py-3
+              text-white font-semibold hover:bg-blue-700 transition"
             >
-              Review Tuition Information
-            </DialogTitle>
+              Proceed to Payment
+            </button>
 
-            {/* Tuition Info */}
-            <div className="mt-4 space-y-3 text-gray-700 text-sm">
-              <p>
-                <span className="font-semibold">Subject:</span> {subject}
-              </p>
-              <p>
-                <span className="font-semibold">Class:</span> {className}
-              </p>
-              <p>
-                <span className="font-semibold">Medium:</span> {medium}
-              </p>
-              <p>
-                <span className="font-semibold">Location:</span> {location}
-              </p>
-              <p>
-                <span className="font-semibold">Schedule:</span> {schedule}
-              </p>
-              <p>
-                <span className="font-semibold">Contact:</span> {phone}
-              </p>
-              <p className="text-green-700 font-semibold">Budget: ৳{budget}</p>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex justify-around mt-6">
-              <button
-                onClick={handlePayment}
-                type="button"
-                className="cursor-pointer inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 
-                           text-sm font-medium text-white hover:bg-blue-700"
-              >
-                Pay Now
-              </button>
-
-              <button
-                type="button"
-                onClick={closeModal}
-                className="cursor-pointer inline-flex justify-center rounded-md bg-red-100 px-4 py-2 
-                           text-sm font-medium text-red-900 hover:bg-red-200"
-              >
-                Cancel
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
+            <button
+              onClick={closeModal}
+              className="flex-1 rounded-xl bg-gray-200 px-4 py-3
+              text-gray-700 font-semibold hover:bg-gray-300 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </DialogPanel>
       </div>
     </Dialog>
   );
 };
 
 export default PurchaseModal;
+
+/* ---------- Small Reusable Row ---------- */
+
+const InfoRow = ({ label, value }) => (
+  <div className="flex justify-between items-center">
+    <span className="text-gray-500">{label}</span>
+    <span className="font-semibold text-gray-800">{value}</span>
+  </div>
+);

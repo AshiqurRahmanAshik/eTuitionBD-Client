@@ -10,13 +10,15 @@ const useRole = () => {
     enabled: !loading && !!user?.email,
     queryKey: ["role", user?.email],
     queryFn: async () => {
+      console.log("🔍 Fetching role for:", user?.email);
       const result = await axiosSecure(`/user/role`);
-      console.log(result);
+      console.log("✅ Role API Response:", result.data);
       return result.data.role;
     },
   });
 
-  //   return { role, isRoleLoading }
+  console.log("useRole returning:", { role, isRoleLoading });
+
   return [role, isRoleLoading];
 };
 
