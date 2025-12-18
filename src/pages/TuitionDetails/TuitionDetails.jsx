@@ -5,7 +5,7 @@ import axios from "axios";
 
 import Container from "../../components/Shared/Container";
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
-import PurchaseModal from "../../components/Modal/PurchaseModal";
+import PurchaseModal from "../../components/Modal/TutorApplicationModal";
 import useRole from "../../hooks/useRole";
 
 const TuitionDetails = () => {

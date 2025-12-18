@@ -1,218 +1,178 @@
-import { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { toast } from "react-hot-toast";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import {
+  FaTimes,
+  FaGraduationCap,
+  FaBriefcase,
+  FaMoneyBillWave,
+  FaCalendar,
+  FaUser,
+  FaEnvelope,
+} from "react-icons/fa";
 
-const EditTuitionModal = ({ isOpen, closeModal, tuition, refetch }) => {
-  const axiosSecure = useAxiosSecure();
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    subject: tuition.subject || "",
-    class: tuition.class || "",
-    studentGender: tuition.studentGender || "Any",
-    tutorGender: tuition.tutorGender || "Any",
-    location: tuition.location || "",
-    salary: tuition.salary || "",
-    perWeek: tuition.perWeek || "",
-    tutorRequirements: tuition.tutorRequirements || "",
-    additionalInfo: tuition.additionalInfo || "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const updateData = {
-        ...formData,
-        salary: parseFloat(formData.salary),
-        perWeek: parseInt(formData.perWeek),
-      };
-
-      await axiosSecure.patch(`/tuitions/${tuition._id}`, updateData);
-      toast.success("Tuition updated successfully");
-      refetch();
-      closeModal();
-    } catch (error) {
-      console.error("Error updating tuition:", error);
-      toast.error(error.response?.data?.message || "Failed to update tuition");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const ViewApplicationModal = ({ isOpen, closeModal, application }) => {
+  if (!application) return null;
 
   return (
     <Dialog open={isOpen} onClose={closeModal} className="relative z-50">
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-black/50" />
+
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-2xl bg-white rounded-2xl p-6 max-h-[90vh] overflow-y-auto">
-          <DialogTitle className="text-xl font-semibold text-gray-900 mb-4">
-            Edit Tuition
-          </DialogTitle>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Subject */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Subject *
-              </label>
-              <input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Class */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Class/Grade *
-              </label>
-              <select
-                name="class"
-                value={formData.class}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Class</option>
-                {[...Array(12)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    Class {i + 1}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Gender Selections */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Student Gender *
-                </label>
-                <select
-                  name="studentGender"
-                  value={formData.studentGender}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="Any">Any</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Preferred Tutor Gender *
-                </label>
-                <select
-                  name="tutorGender"
-                  value={formData.tutorGender}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="Any">Any</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location *
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Salary and Per Week */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Salary (BDT/month) *
-                </label>
-                <input
-                  type="number"
-                  name="salary"
-                  value={formData.salary}
-                  onChange={handleChange}
-                  required
-                  min="500"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Classes Per Week *
-                </label>
-                <input
-                  type="number"
-                  name="perWeek"
-                  value={formData.perWeek}
-                  onChange={handleChange}
-                  required
-                  min="1"
-                  max="7"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            {/* Tutor Requirements */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Tutor Requirements
-              </label>
-              <textarea
-                name="tutorRequirements"
-                value={formData.tutorRequirements}
-                onChange={handleChange}
-                rows="2"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-3 pt-4">
+        <DialogPanel className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-t-2xl">
+            <div className="flex justify-between items-center">
+              <DialogTitle className="text-2xl font-bold text-white">
+                Application Details
+              </DialogTitle>
               <button
-                type="submit"
-                disabled={isLoading}
-                className={`flex-1 py-2 px-4 rounded-lg font-semibold text-white ${
-                  isLoading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
-                }`}
-              >
-                {isLoading ? "Updating..." : "Update Tuition"}
-              </button>
-              <button
-                type="button"
                 onClick={closeModal}
-                className="px-6 py-2 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50"
+                className="text-white hover:bg-white/20 p-2 rounded-full transition"
               >
-                Cancel
+                <FaTimes className="text-xl" />
               </button>
             </div>
-          </form>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            {/* Tutor Info */}
+            <div className="flex items-start gap-4 mb-6 pb-6 border-b border-gray-200">
+              {application.tutorImage && (
+                <img
+                  src={application.tutorImage}
+                  alt={application.tutorName}
+                  className="w-20 h-20 rounded-full object-cover border-2 border-blue-500 shadow-lg"
+                />
+              )}
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-800 mb-1">
+                  {application.tutorName}
+                </h3>
+                <p className="text-gray-600 text-sm mb-2">
+                  {application.tutorEmail}
+                </p>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                    application.status === "approved"
+                      ? "bg-green-100 text-green-800"
+                      : application.status === "rejected"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
+                  {application.status.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            {/* Details Grid */}
+            <div className="space-y-4">
+              {/* Qualifications */}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <FaGraduationCap className="text-blue-600 text-lg" />
+                  <h4 className="font-semibold text-gray-800">
+                    Qualifications
+                  </h4>
+                </div>
+                <p className="text-gray-700 ml-6">
+                  {application.qualifications}
+                </p>
+              </div>
+
+              {/* Experience */}
+              <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <FaBriefcase className="text-purple-600 text-lg" />
+                  <h4 className="font-semibold text-gray-800">Experience</h4>
+                </div>
+                <p className="text-gray-700 ml-6">{application.experience}</p>
+              </div>
+
+              {/* Expected Salary */}
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <FaMoneyBillWave className="text-green-600 text-lg" />
+                  <h4 className="font-semibold text-gray-800">
+                    Expected Salary
+                  </h4>
+                </div>
+                <p className="text-2xl font-bold text-green-600 ml-6">
+                  ৳{application.expectedSalary?.toLocaleString()}/month
+                </p>
+              </div>
+
+              {/* Applied Date */}
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <FaCalendar className="text-gray-600 text-lg" />
+                  <h4 className="font-semibold text-gray-800">Applied On</h4>
+                </div>
+                <p className="text-gray-700 ml-6">
+                  {new Date(application.appliedAt).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+
+              {/* Status Updates */}
+              {application.approvedAt && (
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <h4 className="font-semibold text-gray-800 mb-2">
+                    ✓ Approved On
+                  </h4>
+                  <p className="text-gray-700">
+                    {new Date(application.approvedAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </p>
+                </div>
+              )}
+
+              {application.rejectedAt && (
+                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                  <h4 className="font-semibold text-gray-800 mb-2">
+                    ✗ Rejected On
+                  </h4>
+                  <p className="text-gray-700">
+                    {new Date(application.rejectedAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="p-4 bg-gray-50 rounded-b-2xl flex justify-end">
+            <button
+              onClick={closeModal}
+              className="px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition"
+            >
+              Close
+            </button>
+          </div>
         </DialogPanel>
       </div>
     </Dialog>
   );
 };
 
-export default EditTuitionModal;
+export default ViewApplicationModal;

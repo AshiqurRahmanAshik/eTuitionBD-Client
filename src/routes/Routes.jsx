@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
         element: <Tutors />,
       },
       {
-        path: "/tutor/:email",
+        path: "/tutor/:id", // ✅ Changed from :email to :id
         element: <TutorProfile />,
       },
 

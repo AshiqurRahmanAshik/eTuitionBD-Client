@@ -11,7 +11,7 @@ import {
 } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
 import { AuthContext } from "./AuthContext";
-import axios from "axios"; // ✅ Import axios
+import axios from "axios";
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -37,10 +37,11 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     setLoading(true);
-    localStorage.removeItem("access-token"); // ✅ Clear token on logout
+    localStorage.removeItem("access-token");
     return signOut(auth);
   };
 
+  // 🔹 Existing (keep it)
   const updateUserProfile = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
@@ -48,18 +49,42 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  // onAuthStateChange with Role Fetching ✅
+  // ✅ NEW: Update ONLY user name (Firebase + Backend)
+  const updateUserName = async (name) => {
+    if (!auth.currentUser) return;
+
+    // 1️⃣ Firebase Auth update
+    await updateProfile(auth.currentUser, {
+      displayName: name,
+    });
+
+    // 2️⃣ Backend update (MongoDB)
+    const token = localStorage.getItem("access-token");
+
+    await axios.patch(
+      `${import.meta.env.VITE_API_URL}/profile`,
+      { name },
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // 3️⃣ Update local state (instant UI update)
+    setUser((prev) => ({
+      ...prev,
+      displayName: name,
+    }));
+  };
+
+  // 🔹 Auth state observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      console.log("CurrentUser-->", currentUser?.email);
-
       if (currentUser) {
-        // Get Firebase token
         const token = await currentUser.getIdToken();
         localStorage.setItem("access-token", token);
-        console.log("Token saved to localStorage");
 
-        // Fetch user role from backend ✅
         try {
           const response = await axios.get(
             `${import.meta.env.VITE_API_URL}/user/role`,
@@ -70,16 +95,12 @@ const AuthProvider = ({ children }) => {
             }
           );
 
-          console.log("User Role from API:", response.data.role);
-
-          // Set user with role ✅
           setUser({
             ...currentUser,
             role: response.data.role,
           });
         } catch (error) {
           console.error("Error fetching user role:", error);
-          // Set user without role if API fails
           setUser(currentUser);
         }
       } else {
@@ -90,11 +111,10 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    return () => {
-      return unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
+  // ✅ Expose updateUserName
   const authInfo = {
     user,
     setUser,
@@ -105,6 +125,7 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     logOut,
     updateUserProfile,
+    updateUserName, // 🔥 ADDED
   };
 
   return (

@@ -13,7 +13,7 @@ const TutorCard = ({ tutor }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100">
       {/* Tutor Image */}
-      <div className="relative h-56 overflow-hidden bg-linear-to-br from-blue-100 to-purple-100">
+      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100">
         <img
           src={tutor.photoURL || "https://via.placeholder.com/300"}
           alt={tutor.name}
@@ -67,20 +67,20 @@ const TutorCard = ({ tutor }) => {
         {/* Qualifications */}
         <div className="mb-4">
           <div className="flex items-start text-gray-700 mb-2">
-            <FaGraduationCap className="mr-2 text-blue-500 mt-1 shrink" />
+            <FaGraduationCap className="mr-2 text-blue-500 mt-1 flex-shrink-0" />
             <span className="text-sm">{tutor.qualifications}</span>
           </div>
 
           {/* Experience */}
           <div className="flex items-center text-gray-700 mb-2">
-            <FaBriefcase className="mr-2 text-purple-500 shrink" />
+            <FaBriefcase className="mr-2 text-purple-500 flex-shrink-0" />
             <span className="text-sm">{tutor.experience} experience</span>
           </div>
 
           {/* Subjects */}
           {tutor.subjects && tutor.subjects.length > 0 && (
             <div className="flex items-start text-gray-700 mb-2">
-              <FaBook className="mr-2 text-green-500 mt-1 shrink" />
+              <FaBook className="mr-2 text-green-500 mt-1 flex-shrink-0" />
               <span className="text-sm">{tutor.subjects.join(", ")}</span>
             </div>
           )}
@@ -88,7 +88,7 @@ const TutorCard = ({ tutor }) => {
           {/* Location */}
           {tutor.preferredLocations && tutor.preferredLocations.length > 0 && (
             <div className="flex items-start text-gray-700 mb-3">
-              <FaMapMarkerAlt className="mr-2 text-red-500 mt-1 shrink" />
+              <FaMapMarkerAlt className="mr-2 text-red-500 mt-1 flex-shrink-0" />
               <span className="text-sm">
                 {tutor.preferredLocations.join(", ")}
               </span>
@@ -97,7 +97,7 @@ const TutorCard = ({ tutor }) => {
 
           {/* Expected Salary */}
           <div className="flex items-center text-gray-700">
-            <FaMoneyBillWave className="mr-2 text-green-500 shrink" />
+            <FaMoneyBillWave className="mr-2 text-green-500 flex-shrink-0" />
             <span className="font-semibold text-lg text-green-600">
               ৳{tutor.expectedSalary}/month
             </span>
@@ -123,8 +123,8 @@ const TutorCard = ({ tutor }) => {
 
         {/* View Profile Button */}
         <Link
-          to={`/tutor/${tutor.email}`}
-          className="w-full block text-center px-4 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-medium shadow-md"
+          to={`/tutor/${tutor._id}`}
+          className="w-full block text-center px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-medium shadow-md"
         >
           View Profile
         </Link>

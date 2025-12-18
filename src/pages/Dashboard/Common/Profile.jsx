@@ -22,13 +22,13 @@ const Profile = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
       <div className="bg-white shadow-xl rounded-2xl w-full max-w-3xl overflow-hidden">
         {/* Cover Image */}
-        <img alt="cover" src="" className="w-full h-56 object-cover" />
+        <div className="w-full h-42 bg-linear-to-r from-blue-400 to-indigo-600"></div>
 
         {/* Profile Info */}
         <div className="flex flex-col items-center -mt-14 p-6">
           <img
             alt="profile"
-            src={user?.photoURL || defaultAvatar}
+            src={user?.photoURL}
             className="object-cover rounded-full h-28 w-28 border-4 border-white shadow-md"
           />
 
@@ -38,7 +38,7 @@ const Profile = () => {
                 Loading role...
               </span>
             ) : (
-              <span className="px-4 py-1 text-xs rounded-full bg-lime-500 text-white font-semibold uppercase">
+              <span className="px-4 py-1 text-xs rounded-full bg-blue-500 text-white font-semibold uppercase">
                 {role}
               </span>
             )}
@@ -59,7 +59,7 @@ const Profile = () => {
             <div className="flex justify-end mt-6">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-lime-500 px-6 py-2 rounded-lg text-white font-semibold hover:bg-lime-600 transition"
+                className="bg-blue-500 px-6 py-2 rounded-lg text-white font-semibold hover:bg-blue-600 transition"
               >
                 Update Name
               </button>

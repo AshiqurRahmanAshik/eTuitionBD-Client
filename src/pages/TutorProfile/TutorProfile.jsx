@@ -18,19 +18,19 @@ import {
 } from "react-icons/fa";
 
 const TutorProfile = () => {
-  const { email } = useParams(); // ✅ Changed from id to email
+  const { id } = useParams(); // ✅ Changed from email to id
   const navigate = useNavigate();
 
-  // Fetch tutor details by email
+  // Fetch tutor details by ID
   const {
     data: tutor,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["tutorProfile", email],
+    queryKey: ["tutorProfile", id],
     queryFn: async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/tutors/${email}` // ✅ Using email
+        `${import.meta.env.VITE_API_URL}/tutors/profile/${id}` // ✅ New endpoint
       );
       return res.data;
     },
