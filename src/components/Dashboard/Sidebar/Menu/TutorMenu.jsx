@@ -20,7 +20,7 @@ const TutorMenu = () => {
       <MenuItem
         icon={MdOutlineManageHistory}
         label="Revenue History"
-        address="revenue-history"
+        address="revenue"
       />
     </>
   );
