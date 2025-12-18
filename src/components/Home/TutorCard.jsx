@@ -123,7 +123,7 @@ const TutorCard = ({ tutor }) => {
 
         {/* View Profile Button */}
         <Link
-          to={`/tutors/${tutor.email}`}
+          to={`/tutor/${tutor.email}`}
           className="w-full block text-center px-4 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-medium shadow-md"
         >
           View Profile

@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router";
+
 // Layouts
 import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -12,7 +13,7 @@ import SignUp from "../pages/SignUp/SignUp";
 // Public Pages
 import Tuitions from "../pages/Tuitions/Tuitions";
 import TuitionDetails from "../pages/TuitionDetails/TuitionDetails";
-
+import Tutors from "../pages/Tutors/Tutors";
 import TutorProfile from "../pages/TutorProfile/TutorProfile";
 import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
@@ -40,7 +41,6 @@ import AppliedTutors from "../pages/Dashboard/Student/AppliedTutors";
 import MyPayments from "../pages/Dashboard/Student/MyPayments";
 
 // Tutor Pages
-import Tutors from "../pages/Dashboard/Tutors/Tutors";
 import MyApplications from "../pages/Dashboard/Tutors/MyApplications";
 import OngoingTuitions from "../pages/Dashboard/Tutors/OngoingTuitions";
 import RevenueHistory from "../pages/Dashboard/Tutors/RevenueHistory";

@@ -21,13 +21,13 @@ const StudentMenu = () => {
   return (
     <>
       {/* Existing dashboard */}
-      <MenuItem icon={BsFingerprint} label="My Tuition" address="my-orders" />
+      <MenuItem icon={BsFingerprint} label="My Tuition" address="my-tuitions" />
 
       {/* Added missing menu items based on requirements */}
       <MenuItem
         icon={BsPlusSquare}
         label="Post New Tuition"
-        address="post-new-tuition"
+        address="post-tuition"
       />
 
       <MenuItem icon={BsWallet2} label="Payments" address="payments" />
