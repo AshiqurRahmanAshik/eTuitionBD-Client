@@ -23,10 +23,10 @@ const PaymentSuccess = () => {
           Thank you for your purchase. Your order is being processed.
         </p>
         <Link
-          to="/dashboard/my-orders"
+          to="/"
           className="inline-block bg-lime-500 text-white font-semibold py-2 px-4 rounded hover:bg-lime-600 transition duration-300"
         >
-          Go to My Orders
+          Go to Home
         </Link>
       </div>
     </div>

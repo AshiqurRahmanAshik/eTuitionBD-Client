@@ -21,8 +21,42 @@ const ManageTuitions = () => {
     },
   });
 
+  // Custom toast confirmation
+  const confirmAction = (message) =>
+    new Promise((resolve) => {
+      const id = toast(
+        (t) => (
+          <div className="flex flex-col gap-2">
+            <span>{message}</span>
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={() => {
+                  toast.dismiss(id);
+                  resolve(false);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                onClick={() => {
+                  toast.dismiss(id);
+                  resolve(true);
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: Infinity }
+      );
+    });
+
   const handleApprove = async (tuitionId) => {
-    if (!window.confirm("Approve this tuition post?")) return;
+    const confirmed = await confirmAction("Approve this tuition post?");
+    if (!confirmed) return;
 
     setProcessingId(tuitionId);
     try {
@@ -38,7 +72,8 @@ const ManageTuitions = () => {
   };
 
   const handleReject = async (tuitionId) => {
-    if (!window.confirm("Reject this tuition post?")) return;
+    const confirmed = await confirmAction("Reject this tuition post?");
+    if (!confirmed) return;
 
     setProcessingId(tuitionId);
     try {
@@ -66,6 +101,7 @@ const ManageTuitions = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Header & Stats */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-gray-800">
           Manage Tuitions
@@ -75,7 +111,6 @@ const ManageTuitions = () => {
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4 mb-6">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm text-gray-600">Total</p>
@@ -114,7 +149,7 @@ const ManageTuitions = () => {
         </div>
       </div>
 
-      {/* Tuitions List */}
+      {/* Tuition List */}
       {filteredTuitions.length === 0 ? (
         <div className="bg-white rounded-lg shadow-md p-12 text-center">
           <p className="text-gray-600">No tuitions found for this filter</p>

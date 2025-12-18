@@ -41,14 +41,44 @@ const AppliedTutors = () => {
     setIsModalOpen(true);
   };
 
+  // Toast-based confirmation
+  const confirmAction = (message) =>
+    new Promise((resolve) => {
+      const id = toast(
+        (t) => (
+          <div className="flex flex-col gap-2">
+            <span>{message}</span>
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={() => {
+                  toast.dismiss(id);
+                  resolve(false);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                onClick={() => {
+                  toast.dismiss(id);
+                  resolve(true);
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: Infinity }
+      );
+    });
+
   const handleApprove = async (application) => {
-    if (
-      !window.confirm(
-        `Proceed to payment for ${application.tutorName}? You will pay ৳${application.expectedSalary}.`
-      )
-    ) {
-      return;
-    }
+    const confirmed = await confirmAction(
+      `Proceed to payment for ${application.tutorName}? You will pay ৳${application.expectedSalary}.`
+    );
+    if (!confirmed) return;
 
     setProcessingId(application._id);
 
@@ -70,9 +100,10 @@ const AppliedTutors = () => {
   };
 
   const handleReject = async (applicationId) => {
-    if (!window.confirm("Are you sure you want to reject this application?")) {
-      return;
-    }
+    const confirmed = await confirmAction(
+      "Are you sure you want to reject this application?"
+    );
+    if (!confirmed) return;
 
     setProcessingId(applicationId);
 
@@ -227,7 +258,7 @@ const AppliedTutors = () => {
                           >
                             {processingId === application._id
                               ? "Processing..."
-                              : "Approve & Pay"}
+                              : "Accept & Pay"}
                           </button>
                           <button
                             onClick={() => handleReject(application._id)}
