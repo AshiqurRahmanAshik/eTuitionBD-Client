@@ -56,17 +56,17 @@ const AdminStatistics = () => {
       <div className="mt-8">
         {/* Main Stats Cards */}
         <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 lg:grid-cols-4">
-          {/* Total Revenue Card */}
+          {/* Platform Commission Revenue */}
           <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
             <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-orange-600 to-orange-400 text-white shadow-orange-500/40">
               <FaDollarSign className="w-6 h-6 text-white" />
             </div>
             <div className="p-4 text-right">
               <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Total Revenue
+                Platform Revenue (10%)
               </p>
               <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                ৳{stats?.totalRevenue?.toLocaleString() || 0}
+                ৳{stats?.platformRevenue?.toLocaleString() || 0}
               </h4>
             </div>
           </div>
@@ -269,12 +269,37 @@ const AdminStatistics = () => {
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md p-8">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-bold mb-2">Platform Revenue</h3>
+              <h3 className="text-2xl font-bold mb-2">
+                Platform Revenue Breakdown
+              </h3>
               <p className="text-blue-100 mb-4">
                 Total earnings from all completed transactions
               </p>
-              <div className="text-5xl font-bold">
-                ৳{stats?.totalRevenue?.toLocaleString() || 0}
+              <div className="space-y-3">
+                <div>
+                  <p className="text-blue-100 text-sm">Total Transactions</p>
+                  <div className="text-4xl font-bold">
+                    ৳{stats?.totalRevenue?.toLocaleString() || 0}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <p className="text-blue-100 text-sm">
+                      Platform Commission (10%)
+                    </p>
+                    <div className="text-2xl font-bold">
+                      ৳{stats?.platformRevenue?.toLocaleString() || 0}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-blue-100 text-sm">
+                      Tutor Earnings (90%)
+                    </p>
+                    <div className="text-2xl font-bold">
+                      ৳{stats?.tutorRevenue?.toLocaleString() || 0}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="hidden lg:block">

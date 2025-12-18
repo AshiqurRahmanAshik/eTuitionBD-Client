@@ -114,8 +114,20 @@ const RevenueHistory = () => {
                         {payment.studentEmail}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-lg font-semibold text-green-600">
-                      ৳{payment.amount?.toLocaleString() || 0}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-lg font-semibold text-green-600">
+                        ৳
+                        {(
+                          payment.tutorAmount ||
+                          payment.amount ||
+                          0
+                        ).toLocaleString()}
+                      </div>
+                      {payment.platformCommission && (
+                        <div className="text-xs text-gray-500">
+                          Total: ৳{(payment.totalAmount || 0).toLocaleString()}
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">

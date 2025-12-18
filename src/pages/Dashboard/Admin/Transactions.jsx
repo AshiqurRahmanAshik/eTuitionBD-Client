@@ -200,7 +200,13 @@ const Transactions = () => {
                       Tuition
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
+                      Total Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Platform (10%)
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tutor (90%)
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Transaction ID
@@ -256,8 +262,19 @@ const Transactions = () => {
                             </p>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-lg font-semibold text-green-600">
-                          ৳{amount.toLocaleString()}
+                        <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-gray-900">
+                          ৳
+                          {(transaction.totalAmount || amount).toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-orange-600">
+                          ৳
+                          {(
+                            transaction.platformCommission || 0
+                          ).toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-green-600">
+                          ৳
+                          {(transaction.tutorAmount || amount).toLocaleString()}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
                           <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
@@ -342,7 +359,7 @@ const Transactions = () => {
       {/* Summary Footer */}
       {filteredTransactions.length > 0 && (
         <div className="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
             <div>
               <p className="text-gray-600 text-sm">Total Transactions</p>
               <p className="text-xl font-semibold text-gray-900">
@@ -351,19 +368,26 @@ const Transactions = () => {
             </div>
             <div>
               <p className="text-gray-600 text-sm">Total Revenue</p>
-              <p className="text-xl font-semibold text-green-600">
+              <p className="text-xl font-semibold text-gray-900">
                 ৳{filteredRevenue.toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm">Average Amount</p>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-gray-600 text-sm">Platform (10%)</p>
+              <p className="text-xl font-semibold text-orange-600">
                 ৳
-                {filteredTransactions.length > 0
-                  ? Math.round(
-                      filteredRevenue / filteredTransactions.length
-                    ).toLocaleString()
-                  : 0}
+                {filteredTransactions
+                  .reduce((sum, t) => sum + (t.platformCommission || 0), 0)
+                  .toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm">Tutors (90%)</p>
+              <p className="text-xl font-semibold text-green-600">
+                ৳
+                {filteredTransactions
+                  .reduce((sum, t) => sum + (t.tutorAmount || getAmount(t)), 0)
+                  .toLocaleString()}
               </p>
             </div>
             <div>
