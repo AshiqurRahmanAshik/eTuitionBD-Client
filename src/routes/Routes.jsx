@@ -66,7 +66,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/tuition/:id",
-        element: <TuitionDetails />,
+        element: (
+          <PrivateRoute>
+            <TuitionDetails />
+          </PrivateRoute>
+        ),
       },
 
       // Tutors
@@ -76,7 +80,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/tutor/:id", // ✅ Changed from :email to :id
-        element: <TutorProfile />,
+        element: (
+          <PrivateRoute>
+            <TutorProfile />
+          </PrivateRoute>
+        ),
       },
 
       // Static Pages
