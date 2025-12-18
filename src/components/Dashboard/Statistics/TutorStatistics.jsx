@@ -11,7 +11,7 @@ import LoadingSpinner from "../../Shared/LoadingSpinner";
 const TutorStatistics = () => {
   const axiosSecure = useAxiosSecure();
 
-  // Fetch tutor's applications
+  // Fetch tutor's applications (including payment status)
   const { data: applications = [], isLoading: appsLoading } = useQuery({
     queryKey: ["myApplications"],
     queryFn: async () => {
@@ -29,7 +29,7 @@ const TutorStatistics = () => {
     },
   });
 
-  // Fetch tutor's revenue
+  // Fetch tutor's revenue (only approved & paid)
   const { data: revenueData, isLoading: revenueLoading } = useQuery({
     queryKey: ["tutorRevenue"],
     queryFn: async () => {
@@ -42,17 +42,23 @@ const TutorStatistics = () => {
     return <LoadingSpinner />;
   }
 
+  // Filter application statuses
   const pendingApps = applications.filter(
     (app) => app.status === "pending"
   ).length;
   const approvedApps = applications.filter(
-    (app) => app.status === "approved"
+    (app) => app.status === "approved" && app.paymentStatus === "paid"
   ).length;
   const rejectedApps = applications.filter(
     (app) => app.status === "rejected"
   ).length;
+
+  // Calculate revenue only from approved & paid applications
   const totalRevenue = revenueData?.totalRevenue || 0;
-  const recentTransactions = revenueData?.revenue || [];
+  const recentTransactions =
+    revenueData?.revenue?.filter(
+      (txn) => txn.status === "approved" && txn.paymentStatus === "paid"
+    ) || [];
 
   return (
     <div>
@@ -128,9 +134,8 @@ const TutorStatistics = () => {
         </div>
       </div>
 
-      {/* Details */}
+      {/* Application Status */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-        {/* Application Status */}
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Application Status
@@ -164,16 +169,16 @@ const TutorStatistics = () => {
           </h3>
           {recentTransactions.length > 0 ? (
             <div className="space-y-2">
-              {recentTransactions.slice(0, 3).map((transaction) => (
+              {recentTransactions.slice(0, 3).map((txn) => (
                 <div
-                  key={transaction._id}
+                  key={txn._id}
                   className="flex justify-between items-center text-sm"
                 >
                   <span className="text-gray-600">
-                    {new Date(transaction.paidAt).toLocaleDateString()}
+                    {new Date(txn.paidAt).toLocaleDateString()}
                   </span>
                   <span className="font-semibold text-green-600">
-                    ৳{transaction.amount.toLocaleString()}
+                    ৳{txn.amount.toLocaleString()}
                   </span>
                 </div>
               ))}
@@ -182,74 +187,6 @@ const TutorStatistics = () => {
             <p className="text-gray-500 text-sm">No earnings yet</p>
           )}
         </div>
-
-        {/* Quick Actions */}
-        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Quick Actions
-          </h3>
-          <div className="space-y-2">
-            <a
-              href="/tuitions"
-              className="block px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors text-center"
-            >
-              Browse Tuitions
-            </a>
-            <a
-              href="/dashboard/my-applications"
-              className="block px-4 py-2 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg transition-colors text-center"
-            >
-              My Applications
-            </a>
-            <a
-              href="/dashboard/revenue"
-              className="block px-4 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors text-center"
-            >
-              Revenue History
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Ongoing Tuitions List */}
-      {ongoingTuitions.length > 0 && (
-        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Current Tuitions
-          </h3>
-          <div className="space-y-3">
-            {ongoingTuitions.slice(0, 5).map((tuition) => (
-              <div
-                key={tuition._id}
-                className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
-              >
-                <div>
-                  <h4 className="font-semibold text-gray-800">
-                    {tuition.subject} - Class {tuition.class}
-                  </h4>
-                  <p className="text-sm text-gray-600">{tuition.location}</p>
-                </div>
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
-                  Active
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Info Banner */}
-      <div className="relative flex flex-col bg-clip-border rounded-xl bg-linear-to-r from-blue-500 to-blue-600 text-white shadow-md p-8">
-        <h3 className="text-2xl font-bold mb-2">Keep Growing Your Career!</h3>
-        <p className="text-blue-100 mb-4">
-          Apply to new tuition opportunities and increase your earnings
-        </p>
-        <a
-          href="/tuitions"
-          className="inline-block px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors w-fit"
-        >
-          Browse Available Tuitions
-        </a>
       </div>
     </div>
   );
