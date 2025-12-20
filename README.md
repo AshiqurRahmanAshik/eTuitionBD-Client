@@ -1,18 +1,20 @@
-# eTuitionBd – Tuition Management System 
+# eTuitionBd – Tuition Management System
 
 ## 🎯 Project Overview
+
 The **Tuition Management System** is a comprehensive platform designed for students, tutors, and admins to manage tuition activities efficiently. It allows students to post tuition requirements, tutors to apply, and admins to monitor and regulate all platform operations.
 
 **Purpose of the Project:**
+
 - Solve the real problem of finding qualified tutors and verified tuition posts.
 - Reduce friction between students and tutors by providing automated workflows.
 - Enable digital class tracking, transparent payment, and structured communication.
 - Assist admins in monitoring and regulating all platform activities.
 
-
 ## 💡 Features
 
 ### General Features
+
 - User authentication (Email/Password & Google Login)
 - Role-based routing: Student, Tutor, Admin
 - JWT token verification for protected routes
@@ -21,6 +23,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 - Clean and recruiter-friendly UI
 
 ### Student Features
+
 - Register and manage profile
 - Create, update, and delete tuition posts
 - View tutor applications and approve/reject tutors
@@ -28,18 +31,21 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 - Track tuition and payment history
 
 ### Tutor Features
+
 - Register and manage profile
 - Browse and apply for tuition posts
 - Track application status: Pending, Approved, Rejected
 - View ongoing tuitions and revenue history
 
 ### Admin Features
+
 - Manage users (view, update, delete, change roles)
 - Moderate tuition posts (approve/reject)
 - View financial reports and transaction history
 - Ensure platform security and compliance
 
 ### Additional & Challenge Features
+
 - Search and sort tuition posts
 - Advanced filters (class, subject, location)
 - Pagination on tuition listing page
@@ -51,6 +57,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ## 🖥️ Pages & Layout
 
 ### Navbar
+
 - Logo & website name
 - Navigation links: Home, Tuitions, Tutors, About, Contact
 - Auth-based links: Login/Register (logged out), Dashboard/Profile dropdown (logged in)
@@ -58,6 +65,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 - Mobile and tablet responsive
 
 ### Footer
+
 - About platform
 - Quick links
 - Contact information
@@ -65,6 +73,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 - Copyright section
 
 ### Public Pages
+
 - Home
 - Tuitions Listing & Tuition Details
 - Tutor Listing & Tutor Profile
@@ -75,6 +84,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ### Dashboard Pages
 
 **Student Dashboard:**
+
 - My Tuitions: View approved tuitions
 - Post New Tuition: Create and publish tuition posts
 - Applied Tutors: View tutor applications
@@ -82,11 +92,13 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 - Profile Settings: Update personal info
 
 **Tutor Dashboard:**
+
 - My Applications: Track tuition applications
 - Tutor Ongoing Tuitions: View approved tuitions
 - Revenue History: Check earnings
 
 **Admin Dashboard:**
+
 - User Management: View, update, delete users, change roles
 - Tuition Management: Approve/reject tuition posts
 - Reports & Analytics: Platform earnings & transaction history
@@ -94,6 +106,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ---
 
 ## 🔐 Authentication System
+
 - Register as Student or Tutor (fields: Name, Email, Password, Role, Phone)
 - Firebase authentication
 - Save user profile in MongoDB
@@ -104,6 +117,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ---
 
 ## 🎨 UI & Design
+
 - Unique design, not copied from modules
 - Consistent headings, buttons, image sizes
 - Clean spacing, alignment, responsive dashboard
@@ -113,6 +127,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ---
 
 ## 🛠️ Technical Requirements
+
 - Environment variables for Firebase & MongoDB
 - Backend: Node.js, Express, MongoDB, Mongoose
 - Frontend: React.js, DaisyUI, Framer Motion
@@ -124,6 +139,7 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ---
 
 ## 📦 Packages Used
+
 - React.js, React Router
 - DaisyUI, Tailwind CSS
 - Firebase Authentication
@@ -137,12 +153,14 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 ---
 
 ## 🧩 Challenge Features
+
 - Search & Sort (tuition by subject/location, sort by budget/date)
 - Pagination (tuition listing)
 - JWT token verification (role, access level, expiration)
 - Advanced filter (class, subject, location)
 
 **Optional Features:**
+
 - Tutor rating & review system
 - In-app messaging
 - Student–tutor class calendar sync
@@ -150,9 +168,3 @@ The **Tuition Management System** is a comprehensive platform designed for stude
 - Bookmark tutors or tuition posts
 
 ---
-
-## 📤 Submission Requirements
-- Admin Email & Password
-- Live Site Link
-- GitHub Repository (Client)
-- GitHub Repository (Server)
